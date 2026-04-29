@@ -85,6 +85,7 @@
             margin-left: 260px;
             padding: 40px 48px;
             min-height: 100vh;
+            width: calc(100% - 260px);
         }
         .page-title {
             font-size: 26px;
