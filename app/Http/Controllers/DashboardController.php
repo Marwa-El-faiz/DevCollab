@@ -2,14 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\Project;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        // Plus tard on passera les vrais projets ici
-        // Pour l'instant on retourne juste la vue
-        return view('dashboard');
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        $projects = Project::where('owner_id', $user->id)
+            ->orWhereHas('members', function ($q) use ($user) {
+                $q->where('user_id', $user->id);
+            })
+            ->with(['members', 'tasks'])
+            ->latest()
+            ->get();
+
+        return view('dashboard', compact('projects'));
     }
 }

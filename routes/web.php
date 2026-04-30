@@ -1,48 +1,54 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\TeamController;
+use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\AiController;
 
 Route::middleware(['auth'])->group(function () {
 
-    // Dashboard = liste des projets
-    Route::get('/', [ProjectController::class, 'index'])
+    // Dashboard
+    Route::get('/', [DashboardController::class, 'index'])
          ->name('dashboard');
 
-    // CRUD Projets
+    // Projets
     Route::resource('projects', ProjectController::class);
 
-    // Tâches (imbriquées dans un projet)
-    Route::prefix('projects/{project}/tasks')->name('tasks.')->group(function () {
-        Route::post('/',           [TaskController::class, 'store'])  ->name('store');
-        Route::patch('/{task}',    [TaskController::class, 'update']) ->name('update');
-        Route::delete('/{task}',   [TaskController::class, 'destroy'])->name('destroy');
-        Route::patch('/{task}/move', [TaskController::class, 'move']) ->name('move');
-    });
+    // Tâches
+    Route::post('projects/{project}/tasks', [TaskController::class, 'store'])
+         ->name('tasks.store');
+    Route::put('projects/{project}/tasks/{task}', [TaskController::class, 'update'])
+         ->name('tasks.update');
+    Route::delete('projects/{project}/tasks/{task}', [TaskController::class, 'destroy'])
+         ->name('tasks.destroy');
+    Route::patch('projects/{project}/tasks/{task}/move', [TaskController::class, 'move'])
+         ->name('tasks.move');
 
-    // Commentaires (imbriqués dans une tâche)
-    Route::prefix('tasks/{task}/comments')->name('comments.')->group(function () {
-        Route::post('/',         [CommentController::class, 'store'])  ->name('store');
-        Route::delete('/{comment}', [CommentController::class, 'destroy'])->name('destroy');
-    });
+    // Commentaires
+    Route::post('tasks/{task}/comments', [CommentController::class, 'store'])
+         ->name('comments.store');
+    Route::delete('tasks/{task}/comments/{comment}', [CommentController::class, 'destroy'])
+         ->name('comments.destroy');
 
     // Team
     Route::get('/team', [TeamController::class, 'index'])
          ->name('team.index');
 
     // Settings
-    Route::get('/settings', function () {
-        return view('settings.index');
-    })->name('settings.index');
-    // IA - Génération de tâches
-Route::post('projects/{project}/generate-tasks', 
-    [AiController::class, 'generate'])
-    ->name('projects.generate-tasks');
+    Route::get('/settings', [SettingsController::class, 'index'])
+         ->name('settings.index');
+    Route::put('/settings/profile', [SettingsController::class, 'updateProfile'])
+         ->name('settings.profile');
+    Route::put('/settings/password', [SettingsController::class, 'updatePassword'])
+         ->name('settings.password');
 
+    // IA
+    Route::post('projects/{project}/generate-tasks', [AiController::class, 'generate'])
+         ->name('projects.generate-tasks');
 });
 
 require __DIR__.'/auth.php';
