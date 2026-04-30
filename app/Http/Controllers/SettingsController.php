@@ -13,6 +13,28 @@ class SettingsController extends Controller
         return view('settings.index');
     }
 
+    public function updateTheme(Request $request)
+    {
+        $request->validate([
+            'theme' => 'required|in:light,dark',
+        ]);
+
+        Auth::user()->update(['theme' => $request->theme]);
+
+        return back()->with('success', __('messages.theme_updated'));
+    }
+
+    public function updateLanguage(Request $request)
+    {
+        $request->validate([
+            'language' => 'required|in:fr,en',
+        ]);
+
+        Auth::user()->update(['language' => $request->language]);
+
+        return back()->with('success', __('messages.language_updated'));
+    }
+
     public function updateProfile(Request $request)
     {
         $request->validate([
@@ -25,24 +47,24 @@ class SettingsController extends Controller
             'email' => $request->email,
         ]);
 
-        return back()->with('success', 'Profil mis à jour !');
+        return back()->with('success', __('messages.profile_updated'));
     }
 
     public function updatePassword(Request $request)
     {
         $request->validate([
-            'current_password' => 'required',
-            'password'         => 'required|min:8|confirmed',
+            'current_password'      => 'required',
+            'password'              => 'required|min:8|confirmed',
         ]);
 
         if (!Hash::check($request->current_password, Auth::user()->password)) {
-            return back()->with('error', 'Mot de passe actuel incorrect.');
+            return back()->withErrors(['current_password' => __('messages.wrong_password')]);
         }
 
         Auth::user()->update([
             'password' => Hash::make($request->password),
         ]);
 
-        return back()->with('success', 'Mot de passe changé !');
+        return back()->with('success', __('messages.password_updated'));
     }
 }
