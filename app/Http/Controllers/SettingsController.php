@@ -67,4 +67,27 @@ class SettingsController extends Controller
 
         return back()->with('success', __('messages.password_updated'));
     }
+
+    public function deleteAccount(Request $request)
+{
+    $request->validate([
+        'password' => 'required',
+    ]);
+
+    $user = Auth::user();
+
+    if (!Hash::check($request->password, $user->password)) {
+        return back()->with('error', 'Mot de passe incorrect.');
+    }
+
+    Auth::logout();
+    $user->delete();
+
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+
+    return redirect()->route('login')
+                     ->with('success', 'Compte supprimé avec succès.');
+}
+
 }

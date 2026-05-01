@@ -4,12 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Project;
 use App\Models\Task;
+use App\Models\User;
+use App\Notifications\TaskAssigned;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
-    // ── Créer une tâche ──
     public function store(Request $request, Project $project)
     {
         $this->checkAccess($project);
@@ -23,12 +24,11 @@ class TaskController extends Controller
             'assigned_to' => 'nullable|exists:users,id',
         ]);
 
-        // Position = fin de la colonne todo
         $position = $project->tasks()
                             ->where('status', 'todo')
                             ->count();
 
-        Task::create([
+        $task = Task::create([
             'project_id'  => $project->id,
             'created_by'  => Auth::id(),
             'assigned_to' => $request->assigned_to ?: null,
@@ -40,11 +40,18 @@ class TaskController extends Controller
             'position'    => $position,
         ]);
 
+        // ── Notification : tâche assignée ──
+        if ($request->assigned_to && $request->assigned_to != Auth::id()) {
+            $assignee = User::find($request->assigned_to);
+            if ($assignee) {
+                $assignee->notify(new TaskAssigned($task));
+            }
+        }
+
         return redirect()->back()
                          ->with('success', 'Tâche créée avec succès !');
     }
 
-    // ── Mettre à jour une tâche (statut, titre, priorité) ──
     public function update(Request $request, Project $project, Task $task)
     {
         $this->checkAccess($project);
@@ -58,6 +65,8 @@ class TaskController extends Controller
             'assigned_to' => 'nullable|exists:users,id',
         ]);
 
+        $oldAssignee = $task->assigned_to;
+
         $task->update([
             'title'       => $request->title,
             'description' => $request->description,
@@ -67,12 +76,20 @@ class TaskController extends Controller
             'assigned_to' => $request->assigned_to ?: null,
         ]);
 
+        // ── Notification : nouvel assigné ──
+        if ($request->assigned_to
+            && $request->assigned_to != $oldAssignee
+            && $request->assigned_to != Auth::id()) {
+            $assignee = User::find($request->assigned_to);
+            if ($assignee) {
+                $assignee->notify(new TaskAssigned($task));
+            }
+        }
+
         return redirect()->back()
                          ->with('success', 'Tâche mise à jour !');
     }
 
-    // ── Déplacer une tâche (drag & drop) ──
-    // Appelé en AJAX depuis le Kanban
     public function move(Request $request, Project $project, Task $task)
     {
         $this->checkAccess($project);
@@ -82,13 +99,11 @@ class TaskController extends Controller
             'position' => 'required|integer|min:0',
         ]);
 
-        // Mettre à jour statut + position
         $task->update([
             'status'   => $request->status,
             'position' => $request->position,
         ]);
 
-        // IMPORTANT : retourner du JSON pour le fetch côté JS
         return response()->json([
             'success'  => true,
             'task_id'  => $task->id,
@@ -97,7 +112,6 @@ class TaskController extends Controller
         ]);
     }
 
-    // ── Supprimer une tâche ──
     public function destroy(Project $project, Task $task)
     {
         $this->checkAccess($project);
@@ -108,7 +122,6 @@ class TaskController extends Controller
                          ->with('success', 'Tâche supprimée.');
     }
 
-    // ── Helper : vérifier accès au projet ──
     private function checkAccess(Project $project): void
     {
         $userId = Auth::id();

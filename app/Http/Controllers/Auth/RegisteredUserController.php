@@ -19,31 +19,27 @@ class RegisteredUserController extends Controller
         return view('auth.register');
     }
 
-    public function store(Request $request): RedirectResponse
-    {
-        // Validation des données
-        $request->validate([
-            'name'     => ['required', 'string', 'max:255'],
-            'email'    => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        ]);
+public function store(Request $request): RedirectResponse
+{
+    $request->validate([
+        'name'     => ['required', 'string', 'max:255'],
+        'email'    => ['required', 'string', 'email', 'max:255', 'unique:users'],
+        'password' => ['required', 'confirmed', Rules\Password::defaults()],
+    ]);
 
-        // Si c'est le premier utilisateur → admin
-        // Sinon → member
-        $role = User::count() === 0 ? 'admin' : 'member';
+    
+    $user = User::create([
+        'name'     => $request->name,
+        'email'    => $request->email,
+        'password' => Hash::make($request->password),
+        'role'     => 'member',
+        'theme'    => 'light',
+        'language' => 'fr',
+    ]);
 
-        // Créer l'utilisateur
-        $user = User::create([
-            'name'     => $request->name,
-            'email'    => $request->email,
-            'password' => Hash::make($request->password),
-            'role'     => $role,
-        ]);
+    event(new Registered($user));
+    Auth::login($user);
 
-        event(new Registered($user));
-
-        Auth::login($user);
-
-        return redirect()->route('dashboard');
-    }
+    return redirect()->route('dashboard');
+}
 }

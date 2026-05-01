@@ -2,7 +2,6 @@
 @section('title', 'Dashboard')
 @section('content')
 
-{{-- En-tête --}}
 <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:28px;">
     <div>
         <h1 class="page-title">Dashboard</h1>
@@ -16,7 +15,6 @@
     </a>
 </div>
 
-{{-- Stats globales --}}
 @php
     $totalProjects = $projects->count();
     $totalTasks    = $projects->sum(fn($p) => $p->tasks->count());
@@ -40,7 +38,6 @@
     @endforeach
 </div>
 
-{{-- Projets --}}
 @if($projects->isEmpty())
 <div class="card" style="padding:60px; text-align:center;">
     <svg width="40" height="40" fill="none" stroke="#d1d5db" stroke-width="1.5" viewBox="0 0 24 24" style="margin:0 auto 16px;">
@@ -75,7 +72,6 @@
          onmouseover="this.style.boxShadow='0 4px 16px rgba(0,0,0,0.08)'"
          onmouseout="this.style.boxShadow='none'">
 
-        {{-- Header --}}
         <div style="display:flex; justify-content:space-between; align-items:flex-start;">
             <div style="flex:1; min-width:0;">
                 <a href="{{ route('projects.show', $project) }}"
@@ -113,13 +109,11 @@
             </div>
         </div>
 
-        {{-- Description --}}
         <p style="font-size:12px; color:#6b7280; line-height:1.5;
                   overflow:hidden; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;">
             {{ $project->description ?? 'Aucune description.' }}
         </p>
 
-        {{-- Progression --}}
         <div>
             <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
                 <span style="font-size:12px; color:#374151; font-weight:500;">Progression</span>
@@ -130,7 +124,6 @@
             </div>
         </div>
 
-        {{-- Footer --}}
         <div style="display:flex; align-items:center; justify-content:space-between; padding-top:8px; border-top:1px solid #f3f4f6;">
             {{-- Avatars --}}
             <div style="display:flex;">
@@ -162,7 +155,6 @@
 
 @endif
 
-{{-- Recent Activity --}}
 <div>
     <h2 style="font-size:16px; font-weight:600; color:#111827; margin-bottom:16px; display:flex; align-items:center; gap:8px;">
         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">

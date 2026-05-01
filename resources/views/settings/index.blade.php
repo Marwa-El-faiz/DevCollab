@@ -7,7 +7,6 @@
 
 <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; max-width:900px;">
 
-    {{-- ── APPARENCE ── --}}
     <div class="card" style="padding:24px;">
         <div style="display:flex; align-items:center; gap:10px; margin-bottom:20px;
                     padding-bottom:16px; border-bottom:1px solid var(--border);">
@@ -41,7 +40,6 @@
             @csrf
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
 
-                {{-- Light --}}
                 <label style="cursor:pointer;">
                     <input type="radio" name="theme" value="light"
                            {{ Auth::user()->theme === 'light' ? 'checked' : '' }}
@@ -57,7 +55,6 @@
                     </div>
                 </label>
 
-                {{-- Dark --}}
                 <label style="cursor:pointer;">
                     <input type="radio" name="theme" value="dark"
                            {{ Auth::user()->theme === 'dark' ? 'checked' : '' }}
@@ -77,7 +74,6 @@
         </form>
     </div>
 
-    {{-- ── LANGUE ── --}}
     <div class="card" style="padding:24px;">
         <div style="display:flex; align-items:center; gap:10px; margin-bottom:20px;
                     padding-bottom:16px; border-bottom:1px solid var(--border);">
@@ -105,7 +101,6 @@
             @csrf
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
 
-                {{-- Français --}}
                 <label style="cursor:pointer;">
                     <input type="radio" name="language" value="fr"
                            {{ Auth::user()->language === 'fr' ? 'checked' : '' }}
@@ -121,7 +116,6 @@
                     </div>
                 </label>
 
-                {{-- English --}}
                 <label style="cursor:pointer;">
                     <input type="radio" name="language" value="en"
                            {{ Auth::user()->language === 'en' ? 'checked' : '' }}
@@ -141,7 +135,6 @@
         </form>
     </div>
 
-    {{-- ── PROFIL ── --}}
     <div class="card" style="padding:24px;">
         <div style="display:flex; align-items:center; gap:10px; margin-bottom:20px;
                     padding-bottom:16px; border-bottom:1px solid var(--border);">
@@ -194,7 +187,6 @@
         </form>
     </div>
 
-    {{-- ── SÉCURITÉ ── --}}
     <div class="card" style="padding:24px;">
         <div style="display:flex; align-items:center; gap:10px; margin-bottom:20px;
                     padding-bottom:16px; border-bottom:1px solid var(--border);">
@@ -246,7 +238,6 @@
         </form>
     </div>
 
-    {{-- ── INFO COMPTE ── --}}
     <div class="card" style="padding:24px; grid-column:1/-1;">
         <div style="display:flex; align-items:center; gap:10px; margin-bottom:20px;
                     padding-bottom:16px; border-bottom:1px solid var(--border);">
@@ -291,6 +282,92 @@
                 </div>
             </div>
             @endforeach
+        </div>
+    </div>
+
+    {{-- ── DANGER ZONE ── --}}
+    <div class="card" style="padding:24px; grid-column:1/-1;
+         border:1px solid #fecaca;">
+        <div style="display:flex; align-items:center; gap:10px;
+                    margin-bottom:20px; padding-bottom:16px;
+                    border-bottom:1px solid #fecaca;">
+            <div style="width:36px; height:36px; border-radius:8px;
+                        background:#fee2e2; display:flex; align-items:center;
+                        justify-content:center;">
+                <svg width="18" height="18" fill="none" stroke="#dc2626"
+                     stroke-width="2" viewBox="0 0 24 24">
+                    <polyline points="3 6 5 6 21 6"/>
+                    <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                    <path d="M10 11v6M14 11v6"/>
+                </svg>
+            </div>
+            <div>
+                <div style="font-size:14px; font-weight:600; color:#dc2626;">
+                    Zone de danger
+                </div>
+                <div style="font-size:11px; color:#9ca3af;">
+                    Actions irréversibles
+                </div>
+            </div>
+        </div>
+
+        <div style="display:flex; align-items:center;
+                    justify-content:space-between; flex-wrap:wrap; gap:16px;">
+            <div>
+                <p style="font-size:13px; font-weight:500;
+                          color:var(--text); margin-bottom:4px;">
+                    Supprimer mon compte
+                </p>
+                <p style="font-size:12px; color:var(--text2);">
+                    Toutes tes données seront supprimées définitivement.
+                </p>
+            </div>
+            <button onclick="document.getElementById('modal-delete').style.display='flex'"
+                    style="background:#dc2626; color:#fff; border:none;
+                           padding:8px 16px; border-radius:7px; font-size:13px;
+                           font-weight:500; cursor:pointer;">
+                Supprimer mon compte
+            </button>
+        </div>
+    </div>
+
+    {{-- Modal confirmation suppression --}}
+    <div id="modal-delete"
+         style="display:none; position:fixed; inset:0;
+                background:rgba(0,0,0,0.5); z-index:1000;
+                align-items:center; justify-content:center;">
+        <div style="background:var(--card); border-radius:12px;
+                    padding:32px; max-width:420px; width:90%;
+                    border:1px solid var(--border);">
+            <h3 style="font-size:16px; font-weight:600;
+                       color:#dc2626; margin-bottom:8px;">
+                Confirmer la suppression
+            </h3>
+            <p style="font-size:13px; color:var(--text2); margin-bottom:20px;">
+                Cette action est irréversible. Entre ton mot de passe pour confirmer.
+            </p>
+            <form method="POST" action="{{ route('settings.account.delete') }}">
+                @csrf
+                @method('DELETE')
+                <div class="form-group">
+                    <label class="form-label">Mot de passe</label>
+                    <input type="password" name="password"
+                           class="form-input" placeholder="••••••••" required>
+                </div>
+                <div style="display:flex; gap:12px; margin-top:20px;">
+                    <button type="submit"
+                            style="background:#dc2626; color:#fff; border:none;
+                                   padding:8px 16px; border-radius:7px;
+                                   font-size:13px; cursor:pointer; flex:1;">
+                        Supprimer définitivement
+                    </button>
+                    <button type="button"
+                            onclick="document.getElementById('modal-delete').style.display='none'"
+                            class="btn-secondary" style="flex:1; justify-content:center;">
+                        Annuler
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 

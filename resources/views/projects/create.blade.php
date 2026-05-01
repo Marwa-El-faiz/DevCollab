@@ -2,7 +2,6 @@
 @section('title', 'Nouveau Projet')
 @section('content')
 
-{{-- Pas de max-width ici — le layout prend toute la largeur --}}
 <div style="margin-bottom:32px;">
     <a href="{{ route('dashboard') }}"
        style="font-size:13px; color:var(--text-secondary); text-decoration:none;">
@@ -17,7 +16,6 @@
 
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-bottom:24px;">
 
-            {{-- Nom --}}
             <div class="form-group" style="margin-bottom:0;">
                 <label class="form-label">Nom du projet *</label>
                 <input type="text" name="name" class="form-input"
@@ -28,7 +26,7 @@
                 @enderror
             </div>
 
-            {{-- Description --}}
+           
             <div class="form-group" style="margin-bottom:0;">
                 <label class="form-label">Description</label>
                 <textarea name="description" class="form-input" rows="1"
@@ -37,7 +35,7 @@
             </div>
         </div>
 
-        {{-- Membres --}}
+        
         <div style="margin-bottom:28px;">
             <label class="form-label" style="margin-bottom:10px;">
                 Inviter des membres

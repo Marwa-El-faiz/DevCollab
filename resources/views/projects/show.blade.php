@@ -2,7 +2,7 @@
 @section('title', $project->name)
 @section('content')
 
-{{-- Header --}}
+
 <div style="display:flex; justify-content:space-between;
             align-items:flex-start; margin-bottom:32px;">
     <div>
@@ -33,7 +33,6 @@
             {{ $statusLabel }}
         </span>
 
-        {{-- Bouton IA — route corrigée --}}
         <form method="POST" action="{{ route('projects.generate-tasks', $project) }}"
               onsubmit="
                 this.querySelector('button').disabled = true;
@@ -63,7 +62,6 @@
     </div>
 </div>
 
-{{-- Stats --}}
 @php
     $total    = $project->tasks->count();
     $todo     = $project->tasks->where('status', 'todo')->count();
@@ -91,7 +89,6 @@
     @endforeach
 </div>
 
-{{-- Barre progression --}}
 <div style="background:#fff; border:1px solid #e5e7eb;
             border-radius:12px; padding:20px 24px; margin-bottom:32px;">
     <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
@@ -110,13 +107,10 @@
     </div>
 </div>
 
-{{-- Layout principal --}}
 <div style="display:grid; grid-template-columns:1fr 300px; gap:24px;">
 
-    {{-- Colonne gauche --}}
     <div>
 
-        {{-- KANBAN --}}
         <div style="display:flex; justify-content:space-between;
                     align-items:center; margin-bottom:16px;">
             <h2 style="font-size:16px; font-weight:600; color:#111827;">
@@ -261,7 +255,6 @@
             @endforeach
         </div>
 
-        {{-- COMMENTAIRES --}}
         <div>
             <h2 style="font-size:16px; font-weight:600; color:#111827; margin-bottom:16px;">
                 Commentaires
@@ -360,7 +353,6 @@
         </div>
     </div>
 
-    {{-- Colonne droite : Membres --}}
     <div>
         <h2 style="font-size:16px; font-weight:600; color:#111827; margin-bottom:16px;">
             Membres ({{ $project->members->count() }})
@@ -392,7 +384,6 @@
             @endforeach
         </div>
 
-        {{-- Info IA --}}
         <div style="background:linear-gradient(135deg, #f3f0ff, #ede9fe);
                     border:1px solid #c4b5fd; border-radius:12px;
                     padding:16px; margin-bottom:16px;">
@@ -421,7 +412,6 @@
     </div>
 </div>
 
-{{-- MODAL : Nouvelle tâche --}}
 <div id="modal-task"
      style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.4);
             z-index:1000; align-items:center; justify-content:center;">
@@ -495,7 +485,6 @@
     </div>
 </div>
 
-{{-- MODAL : Modifier tâche --}}
 <div id="modal-edit-task"
      style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.4);
             z-index:1000; align-items:center; justify-content:center;">

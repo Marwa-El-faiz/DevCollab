@@ -18,7 +18,6 @@
 
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-bottom:24px;">
 
-            {{-- Nom --}}
             <div class="form-group" style="margin-bottom:0;">
                 <label class="form-label">Nom du projet *</label>
                 <input type="text" name="name" class="form-input"
@@ -28,7 +27,6 @@
                 @enderror
             </div>
 
-            {{-- Statut --}}
             <div class="form-group" style="margin-bottom:0;">
                 <label class="form-label">Statut</label>
                 <select name="status" class="form-input">
@@ -39,14 +37,12 @@
             </div>
         </div>
 
-        {{-- Description --}}
         <div class="form-group">
             <label class="form-label">Description</label>
             <textarea name="description" class="form-input" rows="3"
                       style="resize:vertical;">{{ old('description', $project->description) }}</textarea>
         </div>
 
-        {{-- Membres --}}
         <div style="margin-bottom:28px;">
             <label class="form-label" style="margin-bottom:10px;">Membres du projet</label>
 
