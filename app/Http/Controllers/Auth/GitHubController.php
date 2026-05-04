@@ -9,13 +9,13 @@ use Laravel\Socialite\Facades\Socialite;
 
 class GitHubController extends Controller
 {
-    // Redirige vers GitHub
+    
     public function redirect()
     {
         return Socialite::driver('github')->redirect();
     }
 
-    // GitHub renvoie l'utilisateur ici
+    
     public function callback()
     {
         try {
@@ -25,8 +25,7 @@ class GitHubController extends Controller
                              ->with('error', 'Connexion GitHub échouée. Réessaie.');
         }
 
-        // Cherche un user existant avec ce github_id
-        // Sinon cherche par email, sinon crée un nouveau
+        
         $user = User::where('github_id', $githubUser->getId())->first();
 
         if (!$user) {
@@ -34,7 +33,7 @@ class GitHubController extends Controller
         }
 
         if (!$user) {
-            // Créer un nouveau compte
+            
             $role = User::count() === 0 ? 'admin' : 'member';
 
             $user = User::create([
@@ -46,9 +45,12 @@ class GitHubController extends Controller
                 'role'         => $role,
                 'theme'        => 'light',
                 'language'     => 'fr',
+                'password'     => \Illuminate\Support\Facades\Hash::make(
+                          \Illuminate\Support\Str::random(32)
+                      ),
             ]);
         } else {
-            // Mettre à jour le token GitHub
+            
             $user->update([
                 'github_id'    => $githubUser->getId(),
                 'github_token' => $githubUser->token,

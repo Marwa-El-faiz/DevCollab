@@ -2,7 +2,7 @@
 @section('title', $project->name)
 @section('content')
 
-
+{{-- Header --}}
 <div style="display:flex; justify-content:space-between;
             align-items:flex-start; margin-bottom:32px;">
     <div>
@@ -62,6 +62,7 @@
     </div>
 </div>
 
+{{-- Stats --}}
 @php
     $total    = $project->tasks->count();
     $todo     = $project->tasks->where('status', 'todo')->count();
@@ -89,6 +90,7 @@
     @endforeach
 </div>
 
+{{-- Barre progression --}}
 <div style="background:#fff; border:1px solid #e5e7eb;
             border-radius:12px; padding:20px 24px; margin-bottom:32px;">
     <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
@@ -107,10 +109,13 @@
     </div>
 </div>
 
+{{-- Layout principal --}}
 <div style="display:grid; grid-template-columns:1fr 300px; gap:24px;">
 
+    {{-- Colonne gauche --}}
     <div>
 
+        {{-- KANBAN --}}
         <div style="display:flex; justify-content:space-between;
                     align-items:center; margin-bottom:16px;">
             <h2 style="font-size:16px; font-weight:600; color:#111827;">
@@ -232,6 +237,76 @@
                         @endif
                     </div>
 
+                    {{-- Pièces jointes --}}
+                    @if($task->attachments->count() > 0)
+                    <div style="border-top:1px solid #f3f4f6; padding-top:8px; margin-bottom:8px;">
+                        <p style="font-size:10px; font-weight:600; color:#9ca3af;
+                                  text-transform:uppercase; margin-bottom:6px;">
+                            📎 {{ $task->attachments->count() }} fichier(s)
+                        </p>
+                        <div style="display:flex; flex-direction:column; gap:4px;">
+                            @foreach($task->attachments as $att)
+                            <div style="display:flex; align-items:center; gap:6px;
+                                        padding:4px 8px; background:#f9fafb;
+                                        border-radius:6px; border:1px solid #e5e7eb;">
+                                <span style="font-size:12px;">{{ $att->icon() }}</span>
+                                <a href="{{ route('attachments.download', [$task, $att]) }}"
+                                   style="font-size:11px; color:#2d6a4f; text-decoration:none;
+                                          flex:1; overflow:hidden; text-overflow:ellipsis;
+                                          white-space:nowrap;"
+                                   title="{{ $att->filename }}">
+                                    {{ Str::limit($att->filename, 20) }}
+                                </a>
+                                <span style="font-size:10px; color:#9ca3af; flex-shrink:0;">
+                                    {{ $att->readableSize() }}
+                                </span>
+                                @if($att->user_id === Auth::id())
+                                <form method="POST"
+                                      action="{{ route('attachments.destroy', [$task, $att]) }}"
+                                      onsubmit="return confirm('Supprimer ce fichier ?')"
+                                      style="display:inline;">
+                                    @csrf @method('DELETE')
+                                    <button type="submit"
+                                            style="background:none; border:none;
+                                                   cursor:pointer; color:#dc2626;
+                                                   padding:0; line-height:1;">
+                                        <svg width="10" height="10" fill="none"
+                                             stroke="currentColor" stroke-width="2"
+                                             viewBox="0 0 24 24">
+                                            <line x1="18" y1="6" x2="6" y2="18"/>
+                                            <line x1="6" y1="6" x2="18" y2="18"/>
+                                        </svg>
+                                    </button>
+                                </form>
+                                @endif
+                            </div>
+                            @endforeach
+                        </div>
+                    </div>
+                    @endif
+
+                    {{-- Upload pièce jointe --}}
+                    <div style="border-top:1px solid #f3f4f6; padding-top:8px; margin-bottom:8px;">
+                        <form method="POST"
+                              action="{{ route('attachments.store', $task) }}"
+                              enctype="multipart/form-data"
+                              id="upload-form-{{ $task->id }}">
+                            @csrf
+                            <label style="display:flex; align-items:center; gap:6px;
+                                          cursor:pointer; font-size:11px; color:#6b7280;
+                                          padding:4px 0;" title="Joindre un fichier">
+                                <svg width="12" height="12" fill="none" stroke="currentColor"
+                                     stroke-width="2" viewBox="0 0 24 24">
+                                    <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
+                                </svg>
+                                <span>Joindre un fichier</span>
+                                <input type="file" name="file" style="display:none;"
+                                       accept=".jpg,.jpeg,.png,.gif,.webp,.pdf,.doc,.docx,.xls,.xlsx,.zip,.txt"
+                                       onchange="document.getElementById('upload-form-{{ $task->id }}').submit()">
+                            </label>
+                        </form>
+                    </div>
+
                     <div style="border-top:1px solid #f3f4f6; padding-top:8px;">
                         <form method="POST" action="{{ route('tasks.update', [$project, $task]) }}">
                             @csrf @method('PATCH')
@@ -250,11 +325,11 @@
                     </div>
                 </div>
                 @endforeach
-
             </div>
             @endforeach
         </div>
 
+        {{-- COMMENTAIRES --}}
         <div>
             <h2 style="font-size:16px; font-weight:600; color:#111827; margin-bottom:16px;">
                 Commentaires
@@ -351,8 +426,61 @@
             </div>
             @endif
         </div>
-    </div>
 
+        {{-- ══ CHAT DU PROJET ══ --}}
+        <div style="margin-top:32px;">
+            <h2 style="font-size:16px; font-weight:600; color:var(--text);
+                       margin-bottom:16px; display:flex; align-items:center; gap:8px;">
+                <svg width="16" height="16" fill="none" stroke="currentColor"
+                     stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                </svg>
+                Chat du projet
+                <span id="chat-count" style="font-size:11px; background:#e5e7eb;
+                      color:#6b7280; padding:2px 8px; border-radius:999px; font-weight:400;">
+                    0 messages
+                </span>
+            </h2>
+
+            <div id="chat-box"
+                 style="background:var(--card); border:1px solid var(--border);
+                        border-radius:10px 10px 0 0; height:360px;
+                        overflow-y:auto; padding:16px;
+                        display:flex; flex-direction:column; gap:12px;">
+                <div id="chat-loading"
+                     style="text-align:center; color:#9ca3af; font-size:13px; margin:auto;">
+                    Chargement...
+                </div>
+            </div>
+
+            <div style="background:var(--card); border:1px solid var(--border);
+                        border-top:none; border-radius:0 0 10px 10px;
+                        padding:12px 16px; display:flex; gap:10px; align-items:center;">
+                <div style="width:32px; height:32px; border-radius:50%;
+                            background:#2d6a4f; display:flex; align-items:center;
+                            justify-content:center; font-size:11px; font-weight:700;
+                            color:#fff; flex-shrink:0;">
+                    {{ strtoupper(substr(Auth::user()->name, 0, 2)) }}
+                </div>
+                <input type="text" id="chat-input"
+                       placeholder="Écrire un message..."
+                       style="flex:1; padding:9px 14px; border:1px solid var(--border);
+                              border-radius:8px; font-size:13px; background:var(--input-bg);
+                              color:var(--text); outline:none; font-family:inherit;"
+                       onkeydown="if(event.key==='Enter' && !event.shiftKey){
+                           event.preventDefault(); sendChat(); }">
+                <button onclick="sendChat()"
+                        style="background:#2d6a4f; color:#fff; border:none;
+                               padding:9px 16px; border-radius:8px; font-size:13px;
+                               font-weight:500; cursor:pointer; white-space:nowrap;">
+                    Envoyer
+                </button>
+            </div>
+        </div>
+
+    </div>{{-- fin colonne gauche --}}
+
+    {{-- Colonne droite : Membres --}}
     <div>
         <h2 style="font-size:16px; font-weight:600; color:#111827; margin-bottom:16px;">
             Membres ({{ $project->members->count() }})
@@ -410,8 +538,10 @@
             </button>
         </form>
     </div>
-</div>
 
+</div>{{-- fin layout --}}
+
+{{-- MODAL : Nouvelle tâche --}}
 <div id="modal-task"
      style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.4);
             z-index:1000; align-items:center; justify-content:center;">
@@ -485,6 +615,7 @@
     </div>
 </div>
 
+{{-- MODAL : Modifier tâche --}}
 <div id="modal-edit-task"
      style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.4);
             z-index:1000; align-items:center; justify-content:center;">
@@ -565,6 +696,113 @@ function updateCommentAction(select) {
     const url = select.options[select.selectedIndex].dataset.url;
     document.getElementById('comment-form').action = url;
 }
+
+// ══ CHAT ══
+const CHAT_URL   = '{{ route("chat.index", $project) }}';
+const CHAT_STORE = '{{ route("chat.store", $project) }}';
+const CSRF       = document.querySelector('meta[name="csrf-token"]').content;
+let lastMessageId = 0;
+
+async function loadChat() {
+    try {
+        const res  = await fetch(CHAT_URL);
+        const msgs = await res.json();
+        renderMessages(msgs, true);
+        if (msgs.length) lastMessageId = msgs[msgs.length - 1].id;
+    } catch(e) { console.error('Chat load error', e); }
+}
+
+function renderMessages(msgs, replace = false) {
+    const box     = document.getElementById('chat-box');
+    const loading = document.getElementById('chat-loading');
+    if (loading) loading.remove();
+    if (replace) box.innerHTML = '';
+
+    if (msgs.length === 0 && replace) {
+        box.innerHTML = `<div style="text-align:center;color:#9ca3af;font-size:13px;margin:auto;">
+            Aucun message encore. Soyez le premier à écrire !</div>`;
+        document.getElementById('chat-count').textContent = '0 messages';
+        return;
+    }
+
+    msgs.forEach(msg => {
+        if (document.getElementById('msg-' + msg.id)) return;
+        const el = document.createElement('div');
+        el.id = 'msg-' + msg.id;
+        el.style.cssText = `display:flex;gap:10px;align-items:flex-start;
+            ${msg.is_me ? 'flex-direction:row-reverse;' : ''}`;
+        el.innerHTML = `
+            <div style="width:30px;height:30px;border-radius:50%;
+                        background:${msg.is_me ? '#2d6a4f' : '#374151'};
+                        display:flex;align-items:center;justify-content:center;
+                        font-size:10px;font-weight:700;color:#fff;flex-shrink:0;">
+                ${msg.user_initials}
+            </div>
+            <div style="max-width:70%;">
+                <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;
+                            ${msg.is_me ? 'justify-content:flex-end;' : ''}">
+                    <span style="font-size:11px;font-weight:600;color:var(--text);">
+                        ${msg.is_me ? 'Vous' : msg.user_name}
+                    </span>
+                    <span style="font-size:10px;color:#9ca3af;">${msg.time}</span>
+                </div>
+                <div style="background:${msg.is_me ? '#2d6a4f' : 'var(--input-bg)'};
+                            color:${msg.is_me ? '#fff' : 'var(--text)'};
+                            padding:8px 12px;
+                            border-radius:${msg.is_me ? '12px 12px 4px 12px' : '12px 12px 12px 4px'};
+                            font-size:13px;line-height:1.5;word-break:break-word;">
+                    ${escapeHtml(msg.body)}
+                </div>
+            </div>`;
+        box.appendChild(el);
+    });
+
+    box.scrollTop = box.scrollHeight;
+    const total = box.querySelectorAll('[id^="msg-"]').length;
+    document.getElementById('chat-count').textContent =
+        total + ' message' + (total > 1 ? 's' : '');
+}
+
+async function sendChat() {
+    const input = document.getElementById('chat-input');
+    const body  = input.value.trim();
+    if (!body) return;
+    input.value = ''; input.disabled = true;
+    try {
+        const res = await fetch(CHAT_STORE, {
+            method:  'POST',
+            headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': CSRF },
+            body:    JSON.stringify({ body }),
+        });
+        const msg = await res.json();
+        renderMessages([msg]);
+        lastMessageId = msg.id;
+    } catch(e) { input.value = body; console.error(e); }
+    finally { input.disabled = false; input.focus(); }
+}
+
+async function pollChat() {
+    try {
+        const res  = await fetch(CHAT_URL + '?after=' + lastMessageId);
+        const msgs = await res.json();
+        const newMsgs = msgs.filter(m => m.id > lastMessageId);
+        if (newMsgs.length) {
+            renderMessages(newMsgs);
+            lastMessageId = newMsgs[newMsgs.length - 1].id;
+        }
+    } catch(e) {}
+}
+
+function escapeHtml(str) {
+    return str
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    loadChat();
+    setInterval(pollChat, 3000);
+});
 </script>
 
 @endsection

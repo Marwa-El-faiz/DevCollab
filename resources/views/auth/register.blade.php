@@ -281,7 +281,7 @@
                 </div>
 
                 <button type="submit" class="btn-submit">
-                    Créer mon compte →
+                    Créer mon compte 
                 </button>
 
             </form>

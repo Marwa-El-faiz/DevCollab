@@ -40,13 +40,16 @@ class TaskController extends Controller
             'position'    => $position,
         ]);
 
-        // ── Notification : tâche assignée ──
-        if ($request->assigned_to && $request->assigned_to != Auth::id()) {
-            $assignee = User::find($request->assigned_to);
-            if ($assignee) {
-                $assignee->notify(new TaskAssigned($task));
-            }
+if ($request->assigned_to && $request->assigned_to != Auth::id()) {
+    $assignee = User::find($request->assigned_to);
+    if ($assignee) {
+        try {
+            $assignee->notify(new TaskAssigned($task));
+        } catch (\Exception $e) {
+            \Log::warning('Notification email échouée: ' . $e->getMessage());
         }
+    }
+}
 
         return redirect()->back()
                          ->with('success', 'Tâche créée avec succès !');

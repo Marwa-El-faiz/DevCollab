@@ -12,7 +12,7 @@ class AiController extends Controller
 {
     public function generate(Request $request, Project $project)
     {
-        // Vérifier accès
+       
         $userId = Auth::id();
         $hasAccess = $project->owner_id === $userId
             || $project->members()->where('user_id', $userId)->exists();
@@ -21,7 +21,6 @@ class AiController extends Controller
             abort(403);
         }
 
-        // Construire le prompt
         $prompt = "Tu es un chef de projet expert. 
 Génère exactement 5 tâches concrètes pour ce projet :
 
@@ -44,8 +43,7 @@ Génère exactement 5 tâches.";
                 'Authorization' => 'Bearer ' . env('GROQ_API_KEY'),
                 'Content-Type'  => 'application/json',
             ])->post('https://api.groq.com/openai/v1/chat/completions', [
-                'model'       => env('GROQ_MODEL', 'llama3-8b-8192'),
-                'messages'    => [
+'model' => env('GROQ_MODEL', 'llama-3.3-70b-versatile'),                'messages'    => [
                     [
                         'role'    => 'user',
                         'content' => $prompt,

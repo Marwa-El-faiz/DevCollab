@@ -7,70 +7,98 @@
     <link rel="icon" type="image/jpeg" href="{{ asset('favicon.jpeg') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            font-family: 'Inter', -apple-system, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             min-height: 100vh;
             display: flex;
         }
 
-        .auth-container { display: flex; width: 100%; min-height: 100vh; }
+        .auth-container {
+            display: flex;
+            width: 100%;
+            min-height: 100vh;
+        }
 
-        /* ── Panneau gauche ── */
+        /* ══ PANNEAU GAUCHE ══ */
         .auth-left {
             width: 45%;
+            flex-shrink: 0;
             background: #1a1d23;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 60px;
+            padding: 60px 48px;
         }
 
         .auth-logo {
-            font-size: 32px;
+            font-size: 30px;
             font-weight: 800;
             color: #ffffff;
-            margin-bottom: 40px;
+            margin-bottom: 36px;
             letter-spacing: -0.5px;
+            text-align: center;
         }
         .auth-logo span { color: #2d6a4f; }
 
-        .auth-left h2 {
-            color: #ffffff;
+        .auth-headline {
             font-size: 26px;
             font-weight: 700;
+            color: #ffffff;
+            line-height: 1.3;
             margin-bottom: 12px;
             text-align: center;
         }
 
-        .auth-left p {
-            color: #6b7280;
-            font-size: 15px;
+        .auth-tagline {
+            font-size: 13px;
+            color: rgba(255,255,255,0.45);
             text-align: center;
             line-height: 1.6;
+            margin-bottom: 40px;
         }
 
-        .deco-stats {
-            margin-top: 48px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
+        .features-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
             width: 100%;
-            max-width: 280px;
+            max-width: 320px;
         }
 
-        .deco-stat {
-            background: #2d3139;
-            border-radius: 10px;
-            padding: 16px;
-            text-align: center;
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
         }
-        .deco-stat .number { font-size: 22px; font-weight: 700; color: #ffffff; }
-        .deco-stat .label  { font-size: 11px; color: #6b7280; margin-top: 2px; }
 
-        /* ── Panneau droit ── */
+        .feature-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.08);
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .feature-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 2px;
+        }
+
+        .feature-desc {
+            font-size: 12px;
+            color: rgba(255,255,255,0.4);
+            line-height: 1.5;
+        }
+
+        /* ══ PANNEAU DROIT ══ */
         .auth-right {
             flex: 1;
             display: flex;
@@ -78,9 +106,13 @@
             justify-content: center;
             padding: 60px 40px;
             background: #ffffff;
+            overflow-y: auto;
         }
 
-        .auth-form-box { width: 100%; max-width: 400px; }
+        .auth-form-box {
+            width: 100%;
+            max-width: 400px;
+        }
 
         .auth-form-box h1 {
             font-size: 24px;
@@ -89,13 +121,12 @@
             margin-bottom: 6px;
         }
 
-        .auth-form-box .subtitle {
+        .subtitle {
             color: #6b7280;
             font-size: 14px;
             margin-bottom: 28px;
         }
 
-        /* ── Boutons OAuth ── */
         .oauth-buttons {
             display: flex;
             flex-direction: column;
@@ -126,7 +157,6 @@
             color: #111827;
         }
 
-        /* ── Divider ── */
         .divider {
             display: flex;
             align-items: center;
@@ -136,7 +166,6 @@
         .divider-line { flex: 1; height: 1px; background: #e5e7eb; }
         .divider-text { font-size: 12px; color: #9ca3af; white-space: nowrap; }
 
-        /* ── Formulaire ── */
         .form-group { margin-bottom: 18px; }
 
         .form-group label {
@@ -157,6 +186,7 @@
             outline: none;
             transition: border-color 0.15s, box-shadow 0.15s;
             background: #f9fafb;
+            font-family: inherit;
         }
         .form-group input:focus {
             border-color: #2d6a4f;
@@ -164,11 +194,7 @@
             box-shadow: 0 0 0 3px rgba(45,106,79,0.1);
         }
 
-        .form-error {
-            color: #dc2626;
-            font-size: 12px;
-            margin-top: 4px;
-        }
+        .form-error { color: #dc2626; font-size: 12px; margin-top: 4px; }
 
         .form-row {
             display: flex;
@@ -187,8 +213,7 @@
         }
         .remember-label input[type="checkbox"] {
             width: 16px; height: 16px;
-            accent-color: #2d6a4f;
-            cursor: pointer;
+            accent-color: #2d6a4f; cursor: pointer;
         }
 
         .forgot-link {
@@ -210,6 +235,7 @@
             font-weight: 600;
             cursor: pointer;
             transition: background 0.15s;
+            font-family: inherit;
         }
         .btn-submit:hover { background: #1b4332; }
 
@@ -226,10 +252,7 @@
         }
         .auth-link a:hover { text-decoration: underline; }
 
-        .alert-error {
-            background: #fee2e2;
-            border: 1px solid #fca5a5;
-            color: #991b1b;
+        .alert {
             padding: 10px 14px;
             border-radius: 8px;
             font-size: 13px;
@@ -238,64 +261,68 @@
             align-items: center;
             gap: 8px;
         }
-
-        .alert-success {
-            background: #d1fae5;
-            border: 1px solid #6ee7b7;
-            color: #065f46;
-            padding: 10px 14px;
-            border-radius: 8px;
-            font-size: 13px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+        .alert-error   { background: #fee2e2; border: 1px solid #fca5a5; color: #991b1b; }
+        .alert-success { background: #d1fae5; border: 1px solid #6ee7b7; color: #065f46; }
     </style>
 </head>
 <body>
 
 <div class="auth-container">
 
-    {{-- ── Panneau gauche décoratif ── --}}
+    {{-- ══ PANNEAU GAUCHE ══ --}}
     <div class="auth-left">
+
         <div class="auth-logo">Dev<span>Collab</span></div>
 
-        <h2>Bon retour<br>parmi nous 👋</h2>
-        <p>Connectez-vous pour accéder<br>à vos projets et vos tâches.</p>
+        <h2 class="auth-headline">
+            Gérez vos projets.<br>Collaborez mieux.
+        </h2>
+        <p class="auth-tagline">
+            La plateforme tout-en-un pour les équipes<br>
+            qui veulent livrer plus vite.
+        </p>
 
-        <div class="deco-stats">
-            <div class="deco-stat">
-                <div class="number">+3</div>
-                <div class="label">Projets actifs</div>
+        <div class="features-list">
+            @foreach([
+                ['M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 0 2-2h2a2 2 0 0 0 2 2',
+                  'Kanban Board',       'Glissez vos tâches entre To Do, In Progress et Done.'],
+                ['M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2 M23 21v-2a4 4 0 0 0-3-3.87 M16 3.13a4 4 0 0 1 0 7.75',
+                  'Collaboration',      'Invitez vos membres, assignez des tâches, commentez.'],
+                ['M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z',
+                  'Chat en temps réel', 'Discutez directement dans chaque projet.'],
+                ['M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48',
+                  'Pièces jointes',     'Joignez PDF, images et documents à vos tâches.'],
+                ['M12 20h9 M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z',
+                  'IA intégrée',        'Générez 5 tâches automatiquement depuis une description.'],
+            ] as [$path, $title, $desc])
+            <div class="feature-item">
+                <div class="feature-icon">
+                    <svg width="16" height="16" fill="none" stroke="#4ade80"
+                         stroke-width="1.8" stroke-linecap="round"
+                         stroke-linejoin="round" viewBox="0 0 24 24">
+                        <path d="{{ $path }}"/>
+                    </svg>
+                </div>
+                <div>
+                    <p class="feature-title">{{ $title }}</p>
+                    <p class="feature-desc">{{ $desc }}</p>
+                </div>
             </div>
-            <div class="deco-stat">
-                <div class="number">+54</div>
-                <div class="label">Tâches totales</div>
-            </div>
-            <div class="deco-stat">
-                <div class="number">+5</div>
-                <div class="label">Membres</div>
-            </div>
-            <div class="deco-stat">
-                <div class="number">+66%</div>
-                <div class="label">Progression</div>
-            </div>
+            @endforeach
         </div>
+
     </div>
 
-    {{-- ── Panneau droit — Formulaire ── --}}
+    {{-- ══ PANNEAU DROIT ══ --}}
     <div class="auth-right">
         <div class="auth-form-box">
 
             <h1>Se connecter</h1>
             <p class="subtitle">Entrez vos identifiants pour continuer</p>
 
-            {{-- Messages flash --}}
             @if(session('error'))
-            <div class="alert-error">
-                <svg width="15" height="15" fill="none" stroke="currentColor"
-                     stroke-width="2" viewBox="0 0 24 24">
+            <div class="alert alert-error">
+                <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <circle cx="12" cy="12" r="10"/>
                     <line x1="12" y1="8" x2="12" y2="12"/>
                     <line x1="12" y1="16" x2="12.01" y2="16"/>
@@ -305,19 +332,17 @@
             @endif
 
             @if(session('success'))
-            <div class="alert-success">
-                <svg width="15" height="15" fill="none" stroke="currentColor"
-                     stroke-width="2.5" viewBox="0 0 24 24">
+            <div class="alert alert-success">
+                <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                     <polyline points="20 6 9 17 4 12"/>
                 </svg>
                 {{ session('success') }}
             </div>
             @endif
 
-            @if ($errors->any())
-            <div class="alert-error">
-                <svg width="15" height="15" fill="none" stroke="currentColor"
-                     stroke-width="2" viewBox="0 0 24 24">
+            @if($errors->any())
+            <div class="alert alert-error">
+                <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <circle cx="12" cy="12" r="10"/>
                     <line x1="12" y1="8" x2="12" y2="12"/>
                     <line x1="12" y1="16" x2="12.01" y2="16"/>
@@ -326,12 +351,9 @@
             </div>
             @endif
 
-            {{-- ════ BOUTONS OAUTH (Google + GitHub) ════ --}}
+            {{-- OAuth --}}
             <div class="oauth-buttons">
-
-                {{-- Google --}}
                 <a href="{{ route('google.redirect') }}" class="btn-oauth">
-                    {{-- Logo Google officiel SVG --}}
                     <svg width="18" height="18" viewBox="0 0 48 48">
                         <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
                         <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
@@ -341,15 +363,12 @@
                     </svg>
                     Continuer avec Google
                 </a>
-
-                {{-- GitHub --}}
                 <a href="{{ route('github.redirect') }}" class="btn-oauth">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="#111827">
                         <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
                     </svg>
                     Continuer avec GitHub
                 </a>
-
             </div>
 
             {{-- Séparateur --}}
@@ -359,7 +378,7 @@
                 <div class="divider-line"></div>
             </div>
 
-            {{-- ════ FORMULAIRE EMAIL ════ --}}
+            {{-- Formulaire --}}
             <form method="POST" action="{{ route('login') }}">
                 @csrf
 
@@ -390,9 +409,9 @@
                         Se souvenir de moi
                     </label>
                     @if(Route::has('password.request'))
-                        <a href="{{ route('password.request') }}" class="forgot-link">
-                            Mot de passe oublié ?
-                        </a>
+                    <a href="{{ route('password.request') }}" class="forgot-link">
+                        Mot de passe oublié ?
+                    </a>
                     @endif
                 </div>
 

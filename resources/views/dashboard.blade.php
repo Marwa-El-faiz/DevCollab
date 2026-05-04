@@ -4,7 +4,7 @@
 
 <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:28px;">
     <div>
-        <h1 class="page-title">Dashboard</h1>
+        <h1 class="page-title">Tableau de bord</h1>
         <p class="page-subtitle">Bonjour {{ Auth::user()->name }}, voici l'état de tes projets</p>
     </div>
     <a href="{{ route('projects.create') }}" class="btn-primary">

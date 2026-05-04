@@ -2,13 +2,34 @@
 @section('title', 'Team')
 @section('content')
 
-{{-- En-tête --}}
 <div style="display:flex; justify-content:space-between;
             align-items:flex-start; margin-bottom:32px;">
     <div>
         <h1 class="page-title">{{ $nav['team'] ?? 'Équipe' }}</h1>
         <p class="page-subtitle">Gérer les membres de l'équipe et leurs rôles</p>
     </div>
+</div>
+
+{{-- Formulaire invitation --}}
+<div class="card" style="padding:24px; margin-bottom:20px;">
+    <h3 style="font-size:14px; font-weight:600; color:var(--text); margin-bottom:16px;">
+        Inviter un membre
+    </h3>
+    <form method="POST" action="{{ route('invitations.store') }}">
+        @csrf
+        <div style="display:flex; gap:12px; flex-wrap:wrap;">
+            <input type="email" name="email"
+                   class="form-input" style="flex:1; min-width:200px;"
+                   placeholder="email@exemple.com" required>
+            <select name="role" class="form-input" style="width:140px;">
+                <option value="member">Member</option>
+                <option value="admin">Admin</option>
+            </select>
+            <button type="submit" class="btn-primary">
+                Envoyer l'invitation
+            </button>
+        </div>
+    </form>
 </div>
 
 <div style="background:#fff; border:1px solid #e5e7eb; border-radius:12px; overflow:hidden;">
@@ -24,7 +45,8 @@
                 <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
             </svg>
             <span style="font-size:14px; font-weight:600; color:#374151;">
-{{ $members->count() }} Membres            </span>
+                {{ $members->count() }} Membres
+            </span>
         </div>
 
         @if(Auth::user()->isAdmin())
