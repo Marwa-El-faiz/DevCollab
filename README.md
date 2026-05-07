@@ -120,13 +120,13 @@ app/
 
 ## Screenshots
 
-### Dashboard
+### Login Page
 <img width="100%" src="https://raw.githubusercontent.com/Marwa-El-faiz/DevCollab/main/Capture%20d'%C3%A9cran%202026-05-07%20111326.png" />
 
-### Kanban Board
+### Dashboard
 <img width="100%" src="https://raw.githubusercontent.com/Marwa-El-faiz/DevCollab/main/Capture%20d'%C3%A9cran%202026-05-07%20111424.png" />
 
-### Analytics
+### Kanban Board
 <img width="100%" src="https://raw.githubusercontent.com/Marwa-El-faiz/DevCollab/main/Capture%20d'%C3%A9cran%202026-05-07%20111553.png" />
 
 ### Calendar View
@@ -135,8 +135,6 @@ app/
 ### Team Management
 <img width="100%" src="https://raw.githubusercontent.com/Marwa-El-faiz/DevCollab/main/Capture%20d'%C3%A9cran%202026-05-07%20111633.png" />
 
-### AI Task Generation
-<img width="100%" src="https://raw.githubusercontent.com/Marwa-El-faiz/DevCollab/main/Capture%20d'%C3%A9cran%202026-05-07%20111748.png" />
 
 ---
 
