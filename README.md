@@ -132,12 +132,13 @@ app/
 ### Calendar View
 <img width="100%" src="https://raw.githubusercontent.com/Marwa-El-faiz/DevCollab/main/Capture%20d'%C3%A9cran%202026-05-07%20111614.png" />
 
-### Analytics
-<img width="100%" src="https://raw.githubusercontent.com/Marwa-El-faiz/DevCollab/main/Capture%20d'%C3%A9cran%202026-05-07%20111650.png" />
-
 
 ### Tasks Management
 <img width="100%" src="https://raw.githubusercontent.com/Marwa-El-faiz/DevCollab/main/Capture%20d'%C3%A9cran%202026-05-07%20111633.png" />
+
+
+### Analytics
+<img width="100%" src="https://raw.githubusercontent.com/Marwa-El-faiz/DevCollab/main/Capture%20d'%C3%A9cran%202026-05-07%20111650.png" />
 
 
 ---
