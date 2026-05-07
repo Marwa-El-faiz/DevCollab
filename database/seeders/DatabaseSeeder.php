@@ -14,13 +14,11 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // ══════════════════════════════════════════════════════
-        // 1. UTILISATEURS — avec rôles, thèmes, skills, job_title
-        // ══════════════════════════════════════════════════════
+        
 
         // ── Admin principal ──
         $admin = User::create([
-            'name'      => 'Marwa El Faiz',
+            'name'      => 'admin admin',
             'email'     => 'admin@devcollab.io',
             'password'  => Hash::make('Admin@2024'),
             'role'      => 'admin',
@@ -303,10 +301,6 @@ class DatabaseSeeder extends Seeder
 
         $this->command->info('✅ Projet 1 créé — DevCollab (15 tâches)');
 
-        // ══════════════════════════════════════════════════════
-        // 3. PROJET 2 — E-commerce
-        //    Progression : ~44% | Statut : actif | En retard !
-        // ══════════════════════════════════════════════════════
 
         $p2 = Project::create([
             'owner_id'    => $admin2->id,
@@ -427,10 +421,7 @@ class DatabaseSeeder extends Seeder
 
         $this->command->info('✅ Projet 2 créé — ShopFlow (9 tâches)');
 
-        // ══════════════════════════════════════════════════════
-        // 4. PROJET 3 — App Mobile RH
-        //    Progression : ~57% | Statut : actif
-        // ══════════════════════════════════════════════════════
+      
 
         $p3 = Project::create([
             'owner_id'    => $admin->id,
@@ -531,10 +522,6 @@ class DatabaseSeeder extends Seeder
 
         $this->command->info('✅ Projet 3 créé — HRConnect (7 tâches)');
 
-        // ══════════════════════════════════════════════════════
-        // 5. PROJET 4 — Microservices (TERMINÉ — pour montrer
-        //    le statut "completed" dans le dashboard)
-        // ══════════════════════════════════════════════════════
 
         $p4 = Project::create([
             'owner_id'    => $admin2->id,
@@ -578,10 +565,7 @@ class DatabaseSeeder extends Seeder
 
         $this->command->info('✅ Projet 4 créé — MicroCore (8 tâches, terminé)');
 
-        // ══════════════════════════════════════════════════════
-        // 6. COMMENTAIRES — pour alimenter le Recent Activity
-        //    et montrer la fonctionnalité de collaboration
-        // ══════════════════════════════════════════════════════
+        
 
         // Récupérer des tâches pour les commentaires
         $taskCI      = Task::where('title', 'LIKE', '%GitHub Actions CI/CD%')->where('project_id', $p1->id)->first();
