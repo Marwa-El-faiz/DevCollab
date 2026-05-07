@@ -105,10 +105,6 @@ class DatabaseSeeder extends Seeder
 
         $this->command->info('✅ 7 utilisateurs créés (2 admins, 5 membres)');
 
-        // ══════════════════════════════════════════════════════
-        // 2. PROJET 1 — DevCollab lui-même (démo parfaite)
-        //    Progression : ~67% | Statut : actif
-        // ══════════════════════════════════════════════════════
 
         $p1 = Project::create([
             'owner_id'    => $admin->id,
