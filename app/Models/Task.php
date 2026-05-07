@@ -28,8 +28,6 @@ class Task extends Model
         'ai_generated' => 'boolean',
     ];
 
-  
-
     public function project()
     {
         return $this->belongsTo(Project::class);
@@ -50,39 +48,30 @@ class Task extends Model
         return $this->hasMany(Comment::class);
     }
 
+    public function attachments()
+    {
+        return $this->hasMany(TaskAttachment::class);
+    }
 
     public function deadlineStatus(): string
     {
-        if (!$this->due_date || $this->status === 'done') {
-            return 'ok';
-        }
-
+        if (!$this->due_date || $this->status === 'done') return 'ok';
         $due = Carbon::parse($this->due_date)->endOfDay();
-
-        if ($due->isPast()) {
-            return 'overdue';
-        }
-
-        if ($due->isBefore(now()->addDays(2))) {
-            return 'soon';
-        }
-
+        if ($due->isPast()) return 'overdue';
+        if ($due->isBefore(now()->addDays(2))) return 'soon';
         return 'ok';
     }
 
-   
     public function isOverdue(): bool
     {
         return $this->deadlineStatus() === 'overdue';
     }
 
-   
     public function isDueSoon(): bool
     {
         return $this->deadlineStatus() === 'soon';
     }
 
-  
     public function priorityColor(): string
     {
         return match($this->priority) {
@@ -92,8 +81,4 @@ class Task extends Model
             default  => '#6b7280',
         };
     }
-    public function attachments()
-{
-    return $this->hasMany(TaskAttachment::class);
-}
 }

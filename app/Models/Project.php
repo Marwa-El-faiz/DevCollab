@@ -40,4 +40,14 @@ class Project extends Model
         $done = $this->tasks()->where('status', 'done')->count();
         return (int) round(($done / $total) * 100);
     }
+
+    // Vérifier si un user est admin du projet
+    public function isAdmin(int $userId): bool
+    {
+return $this->owner_id === $userId
+    || $this->members()
+            ->where('project_user.user_id', $userId)
+            ->where('project_user.role', 'admin')
+            ->exists();
+    }
 }

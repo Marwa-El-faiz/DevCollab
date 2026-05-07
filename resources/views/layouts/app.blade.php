@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" type="image/jpeg" href="{{ asset('favicon.jpeg') }}">
-
     <title>DevCollab — @yield('title')</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
@@ -53,13 +52,14 @@
             display: flex;
             flex-direction: column;
             position: fixed;
-            top: 0;
-            left: 0;
+            top: 0; left: 0;
             height: 100vh;
             z-index: 100;
             transition: width 0.25s ease, min-width 0.25s ease, background 0.2s;
         }
+
         body.dark .sidebar { background: #111318; }
+
         body.sidebar-collapsed .sidebar {
             width: var(--sidebar-mini);
             min-width: var(--sidebar-mini);
@@ -71,62 +71,59 @@
             border-bottom: 1px solid #2d3139;
             min-height: 72px;
         }
+
         .sidebar-logo .brand {
-            font-size: 16px;
-            font-weight: 700;
-            color: #fff;
+            font-size: 16px; font-weight: 700; color: #fff;
             white-space: nowrap;
             transition: opacity 0.18s ease, transform 0.18s ease;
         }
+
         .sidebar-logo .sub {
-            font-size: 11px;
-            color: #6b7280;
-            margin-top: 2px;
+            font-size: 11px; color: #6b7280; margin-top: 2px;
             white-space: nowrap;
             transition: opacity 0.18s ease, transform 0.18s ease;
         }
+
         body.sidebar-collapsed .sidebar-logo .brand,
         body.sidebar-collapsed .sidebar-logo .sub {
-            opacity: 0;
-            transform: translateX(-8px);
-            pointer-events: none;
+            opacity: 0; transform: translateX(-8px); pointer-events: none;
         }
 
         .sidebar-toggle {
-            position: absolute;
-            right: -13px;
-            top: 22px;
-            width: 26px;
-            height: 26px;
-            border: 1px solid #2d3139;
-            border-radius: 50%;
-            background: #1f232b;
-            color: #e5e7eb;
+            position: absolute; right: -13px; top: 22px;
+            width: 26px; height: 26px;
+            border: 1px solid #2d3139; border-radius: 50%;
+            background: #1f232b; color: #e5e7eb;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: flex; align-items: center; justify-content: center;
             transition: background 0.15s, transform 0.2s ease, border-color 0.15s;
             z-index: 120;
         }
-        .sidebar-toggle:hover {
-            background: #2d3139;
-            border-color: #3f4652;
-        }
-        .sidebar-toggle svg {
-            transition: transform 0.25s ease;
-        }
-        body.sidebar-collapsed .sidebar-toggle svg {
-            transform: rotate(180deg);
-        }
+
+        .sidebar-toggle:hover { background: #2d3139; border-color: #3f4652; }
+        .sidebar-toggle svg { transition: transform 0.25s ease; }
+        body.sidebar-collapsed .sidebar-toggle svg { transform: rotate(180deg); }
 
         .sidebar-nav { padding: 12px 8px; flex: 1; }
 
+        /* Section label dans la nav */
+        .nav-section {
+            font-size: 9px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #4b5563;
+            padding: 8px 12px 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            transition: opacity 0.18s ease;
+        }
+
+        body.sidebar-collapsed .nav-section { opacity: 0; height: 0; padding: 0; }
+
         .nav-link {
             position: relative;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            display: flex; align-items: center; gap: 10px;
             padding: 8px 12px;
             border-radius: 7px;
             color: #9ca3af;
@@ -134,121 +131,100 @@
             font-size: 13.5px;
             transition: background 0.15s, color 0.15s, justify-content 0.2s ease;
         }
-        .nav-link:hover,
-        .nav-link.active { background: #2d3139; color: #fff; }
+
+        .nav-link:hover, .nav-link.active { background: #2d3139; color: #fff; }
         .nav-link.active { font-weight: 500; }
-        .nav-link svg {
-            flex-shrink: 0;
-        }
+        .nav-link svg { flex-shrink: 0; }
+
         .nav-link span {
-            white-space: nowrap;
-            overflow: hidden;
+            white-space: nowrap; overflow: hidden;
             transition: opacity 0.18s ease, width 0.2s ease, transform 0.18s ease;
         }
+
         body.sidebar-collapsed .nav-link {
-            justify-content: center;
-            gap: 0;
-            padding: 10px 0;
+            justify-content: center; gap: 0; padding: 10px 0;
         }
+
         body.sidebar-collapsed .nav-link span {
-            width: 0;
-            opacity: 0;
-            transform: translateX(-8px);
+            width: 0; opacity: 0; transform: translateX(-8px);
         }
+
         body.sidebar-collapsed .nav-link:hover::after {
             content: attr(data-tooltip);
-            position: absolute;
-            left: calc(100% + 10px);
-            top: 50%;
+            position: absolute; left: calc(100% + 10px); top: 50%;
             transform: translateY(-50%);
-            background: #111827;
-            color: #fff;
-            padding: 6px 9px;
-            border-radius: 6px;
-            font-size: 12px;
-            font-weight: 500;
+            background: #111827; color: #fff;
+            padding: 6px 9px; border-radius: 6px;
+            font-size: 12px; font-weight: 500;
             white-space: nowrap;
-            box-shadow: 0 8px 22px rgba(0, 0, 0, 0.18);
+            box-shadow: 0 8px 22px rgba(0,0,0,0.18);
             pointer-events: none;
         }
+
         body.sidebar-collapsed .nav-link:hover::before {
             content: "";
-            position: absolute;
-            left: calc(100% + 4px);
-            top: 50%;
+            position: absolute; left: calc(100% + 4px); top: 50%;
             transform: translateY(-50%);
             border: 6px solid transparent;
             border-right-color: #111827;
             pointer-events: none;
         }
 
+        /* Badge notification dans nav */
+        .nav-badge {
+            margin-left: auto;
+            background: #ef4444;
+            color: #fff;
+            font-size: 9px;
+            font-weight: 700;
+            padding: 1px 5px;
+            border-radius: 999px;
+            min-width: 16px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        body.sidebar-collapsed .nav-badge { display: none; }
+
         .sidebar-user {
             padding: 12px 16px;
             border-top: 1px solid #2d3139;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            display: flex; align-items: center; gap: 10px;
             transition: padding 0.25s ease;
         }
+
         body.sidebar-collapsed .sidebar-user {
-            padding: 12px 8px;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-        .avatar-sm {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: #2d6a4f;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 11px;
-            font-weight: 700;
-            color: #fff;
-            flex-shrink: 0;
-        }
-        .user-info {
-            flex: 1;
-            min-width: 0;
-            transition: opacity 0.18s ease, width 0.2s ease, transform 0.18s ease;
-        }
-        .user-name {
-            font-size: 12px;
-            font-weight: 500;
-            color: #fff;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .user-role { font-size: 10px; color: #6b7280; text-transform: capitalize; }
-        body.sidebar-collapsed .user-info {
-            width: 0;
-            opacity: 0;
-            transform: translateX(-8px);
-            pointer-events: none;
+            padding: 12px 8px; justify-content: center; flex-wrap: wrap; gap: 8px;
         }
 
+        .avatar-sm {
+            width: 32px; height: 32px; border-radius: 50%;
+            background: #2d6a4f;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 11px; font-weight: 700; color: #fff; flex-shrink: 0;
+        }
+
+        .user-info { flex: 1; min-width: 0; transition: opacity 0.18s ease, width 0.2s ease, transform 0.18s ease; }
+        .user-name { font-size: 12px; font-weight: 500; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .user-role { font-size: 10px; color: #6b7280; text-transform: capitalize; }
+
+        body.sidebar-collapsed .user-info { width: 0; opacity: 0; transform: translateX(-8px); pointer-events: none; }
+
         .logout-btn {
-            background: none;
-            border: none;
-            color: #6b7280;
-            cursor: pointer;
-            padding: 4px;
-            display: flex;
-            align-items: center;
+            background: none; border: none; color: #6b7280;
+            cursor: pointer; padding: 4px; display: flex; align-items: center;
         }
         .logout-btn:hover { color: #e5e7eb; }
 
         .main-content {
             margin-left: var(--sidebar-w);
             width: calc(100% - var(--sidebar-w));
-            min-height: 100vh;
-            padding: 32px 40px;
+            min-height: 100vh; padding: 32px 40px;
             background: var(--bg);
             transition: margin-left 0.25s ease, width 0.25s ease, background 0.2s;
+            display: flex; flex-direction: column;
         }
+
         body.sidebar-collapsed .main-content {
             margin-left: var(--sidebar-mini);
             width: calc(100% - var(--sidebar-mini));
@@ -260,77 +236,56 @@
         .card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; }
 
         .btn-primary {
-            background: #2d6a4f;
-            color: #fff;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 7px;
-            font-size: 13px;
-            font-weight: 500;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
+            background: #2d6a4f; color: #fff; border: none;
+            padding: 8px 16px; border-radius: 7px; font-size: 13px;
+            font-weight: 500; cursor: pointer;
+            display: inline-flex; align-items: center; gap: 6px;
             transition: background 0.15s;
         }
         .btn-primary:hover { background: #1b4332; color: #fff; }
 
         .btn-secondary {
-            background: var(--card);
-            color: var(--text2);
+            background: var(--card); color: var(--text2);
             border: 1px solid var(--border);
-            padding: 8px 16px;
-            border-radius: 7px;
-            font-size: 13px;
-            font-weight: 500;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
+            padding: 8px 16px; border-radius: 7px; font-size: 13px;
+            font-weight: 500; cursor: pointer;
+            display: inline-flex; align-items: center; gap: 6px;
             transition: all 0.15s;
         }
         .btn-secondary:hover { color: var(--text); }
 
         .form-input {
-            width: 100%;
-            padding: 9px 12px;
-            border: 1px solid var(--input-border);
-            border-radius: 7px;
-            font-size: 13px;
-            background: var(--input-bg);
-            color: var(--text);
-            outline: none;
-            font-family: inherit;
-            transition: border-color 0.15s;
+            width: 100%; padding: 9px 12px;
+            border: 1px solid var(--input-border); border-radius: 7px;
+            font-size: 13px; background: var(--input-bg); color: var(--text);
+            outline: none; font-family: inherit; transition: border-color 0.15s;
         }
         .form-input:focus { border-color: #2d6a4f; }
 
         .form-label { display: block; font-size: 12px; font-weight: 500; color: var(--text2); margin-bottom: 5px; }
         .form-group { margin-bottom: 16px; }
 
-        .alert {
-            padding: 11px 16px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            font-size: 13px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+        .alert { padding: 11px 16px; border-radius: 8px; margin-bottom: 20px; font-size: 13px; display: flex; align-items: center; gap: 8px; }
         .alert-success { background: #d1fae5; border: 1px solid #a7f3d0; color: #065f46; }
         .alert-error   { background: #fee2e2; border: 1px solid #fecaca; color: #991b1b; }
 
         .hidden { display: none; }
+
+        .app-footer {
+            margin-top: auto; padding-top: 24px;
+            color: var(--text2); font-size: 12px; text-align: center;
+        }
     </style>
 </head>
 
 @php
     $theme = auth()->check() ? auth()->user()->theme    : 'light';
     $lang  = auth()->check() ? auth()->user()->language : 'fr';
+    $isAdmin = auth()->check() && auth()->user()->isAdmin();
 
     $t = [
-        'fr' => ['dashboard'=>'Tableau de bord','board'=>'Board','team'=>'Équipe','settings'=>'Paramètres','logout'=>'Déconnexion'],
-        'en' => ['dashboard'=>'Dashboard','board'=>'Projects','team'=>'Team','settings'=>'Settings','logout'=>'Logout'],
+        'fr' => ['dashboard'=>'Tableau de bord','board'=>'Board','team'=>'Équipe','settings'=>'Paramètres','logout'=>'Déconnexion','my_tasks'=>'Mes Tâches'],
+        'en' => ['dashboard'=>'Dashboard','board'=>'Projects','team'=>'Team','settings'=>'Settings','logout'=>'Logout','my_tasks'=>'My Tasks'],
     ];
     $nav = $t[$lang] ?? $t['fr'];
 
@@ -366,12 +321,17 @@
             'messages.comment_deleted'  => 'Comment deleted.',
         ],
     ];
-    $dict = $msgs[$lang] ?? $msgs['fr'];
 
+    $dict = $msgs[$lang] ?? $msgs['fr'];
     $successMsg = session('success');
     $successMsg = $dict[$successMsg] ?? $successMsg;
     $errorMsg   = session('error');
     $errorMsg   = $dict[$errorMsg]   ?? $errorMsg;
+
+    // Tâches en retard pour le membre connecté
+    $myOverdueTasks = auth()->check()
+        ? auth()->user()->tasks()->where('status','!=','done')->whereNotNull('due_date')->where('due_date','<',now()->toDateString())->count()
+        : 0;
 @endphp
 
 <body class="{{ $theme === 'dark' ? 'dark' : '' }}">
@@ -382,15 +342,20 @@
         <div class="sidebar-logo">
             <div class="brand">DevCollab</div>
             <div class="sub">Project Management</div>
-
-            <button type="button" class="sidebar-toggle" id="sidebarToggle" aria-label="Réduire le menu" aria-expanded="true">
-                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.3" viewBox="0 0 24 24">
+            <button type="button" class="sidebar-toggle" id="sidebarToggle"
+                    aria-label="Réduire le menu" aria-expanded="true">
+                <svg width="14" height="14" fill="none" stroke="currentColor"
+                     stroke-width="2.3" viewBox="0 0 24 24">
                     <polyline points="15 18 9 12 15 6"/>
                 </svg>
             </button>
         </div>
 
         <nav class="sidebar-nav">
+
+            {{-- Section commune --}}
+            <div class="nav-section">Principal</div>
+
             <a href="{{ route('dashboard') }}"
                class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}"
                data-tooltip="{{ $nav['dashboard'] }}">
@@ -413,30 +378,48 @@
                 </svg>
                 <span>{{ $nav['board'] }}</span>
             </a>
-           <a href="{{ route('analytics.index') }}"
-   class="nav-link {{ request()->routeIs('analytics.*') ? 'active' : '' }}"
-   data-tooltip="Analytics">
-    <svg width="16" height="16" fill="none" stroke="currentColor"
-         stroke-width="2" viewBox="0 0 24 24">
-        <line x1="18" y1="20" x2="18" y2="10"/>
-        <line x1="12" y1="20" x2="12" y2="4"/>
-        <line x1="6" y1="20" x2="6" y2="14"/>
-    </svg>
-    <span>Analytics</span>
-</a>
 
-<a href="{{ route('calendar.index') }}"
-   class="nav-link {{ request()->routeIs('calendar.*') ? 'active' : '' }}"
-   data-tooltip="Calendrier">
-    <svg width="16" height="16" fill="none" stroke="currentColor"
-         stroke-width="2" viewBox="0 0 24 24">
-        <rect x="3" y="4" width="18" height="18" rx="2"/>
-        <line x1="16" y1="2" x2="16" y2="6"/>
-        <line x1="8" y1="2" x2="8" y2="6"/>
-        <line x1="3" y1="10" x2="21" y2="10"/>
-    </svg>
-    <span>Calendrier</span>
-</a>
+            <a href="{{ route('calendar.index') }}"
+               class="nav-link {{ request()->routeIs('calendar.*') ? 'active' : '' }}"
+               data-tooltip="Calendrier">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <rect x="3" y="4" width="18" height="18" rx="2"/>
+                    <line x1="16" y1="2" x2="16" y2="6"/>
+                    <line x1="8" y1="2" x2="8" y2="6"/>
+                    <line x1="3" y1="10" x2="21" y2="10"/>
+                </svg>
+                <span>Calendrier</span>
+            </a>
+
+            {{-- Mes Tâches — visible par TOUS --}}
+            <a href="{{ route('tasks.my') }}"
+               class="nav-link {{ request()->routeIs('tasks.my') ? 'active' : '' }}"
+               data-tooltip="{{ $nav['my_tasks'] }}">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M9 11l3 3L22 4"/>
+                    <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+                </svg>
+                <span>{{ $nav['my_tasks'] }}</span>
+                @if($myOverdueTasks > 0)
+                <span class="nav-badge">{{ $myOverdueTasks }}</span>
+                @endif
+            </a>
+
+            {{-- Section Admin uniquement --}}
+            @if($isAdmin)
+            <div class="nav-section" style="margin-top:8px;">Administration</div>
+
+            <a href="{{ route('analytics.index') }}"
+               class="nav-link {{ request()->routeIs('analytics.*') ? 'active' : '' }}"
+               data-tooltip="Analytics">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <line x1="18" y1="20" x2="18" y2="10"/>
+                    <line x1="12" y1="20" x2="12" y2="4"/>
+                    <line x1="6" y1="20" x2="6" y2="14"/>
+                </svg>
+                <span>Analytics</span>
+            </a>
+
             <a href="{{ route('team.index') }}"
                class="nav-link {{ request()->routeIs('team.*') ? 'active' : '' }}"
                data-tooltip="{{ $nav['team'] }}">
@@ -448,6 +431,10 @@
                 </svg>
                 <span>{{ $nav['team'] }}</span>
             </a>
+            @endif
+
+            {{-- Settings visible par tous --}}
+            <div class="nav-section" style="margin-top:8px;">Compte</div>
 
             <a href="{{ route('settings.index') }}"
                class="nav-link {{ request()->routeIs('settings.*') ? 'active' : '' }}"
@@ -458,6 +445,7 @@
                 </svg>
                 <span>{{ $nav['settings'] }}</span>
             </a>
+
         </nav>
 
         <div class="sidebar-user">
@@ -466,13 +454,13 @@
             </div>
             <div class="user-info">
                 <div class="user-name">{{ Auth::user()->name }}</div>
-                <div class="user-role">{{ Auth::user()->role }}</div>
+                <div class="user-role">
+                    {{ Auth::user()->isAdmin() ? ' Admin' : ' Membre' }}
+                </div>
             </div>
 
-            {{-- Cloche notifications --}}
             @include('components.notifications_bell')
 
-            {{-- Logout --}}
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
                 <button type="submit" class="logout-btn" title="{{ $nav['logout'] }}">
@@ -510,29 +498,33 @@
         @endif
 
         @yield('content')
+
+        <footer class="app-footer">
+            © {{ date('Y') }} DevCollab. Tous droits réservés. Développé par Marwa El Faiz.
+        </footer>
     </main>
 
 </div>
 
 <script>
-    (function () {
-        const key = 'devcollab-sidebar-collapsed';
-        const body = document.body;
-        const toggle = document.getElementById('sidebarToggle');
+(function () {
+    const key    = 'devcollab-sidebar-collapsed';
+    const body   = document.body;
+    const toggle = document.getElementById('sidebarToggle');
 
-        if (localStorage.getItem(key) === 'true') {
-            body.classList.add('sidebar-collapsed');
-            toggle?.setAttribute('aria-expanded', 'false');
-            toggle?.setAttribute('aria-label', 'Agrandir le menu');
-        }
+    if (localStorage.getItem(key) === 'true') {
+        body.classList.add('sidebar-collapsed');
+        toggle?.setAttribute('aria-expanded', 'false');
+        toggle?.setAttribute('aria-label', 'Agrandir le menu');
+    }
 
-        toggle?.addEventListener('click', function () {
-            const collapsed = body.classList.toggle('sidebar-collapsed');
-            localStorage.setItem(key, collapsed ? 'true' : 'false');
-            toggle.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
-            toggle.setAttribute('aria-label', collapsed ? 'Agrandir le menu' : 'Réduire le menu');
-        });
-    })();
+    toggle?.addEventListener('click', function () {
+        const collapsed = body.classList.toggle('sidebar-collapsed');
+        localStorage.setItem(key, collapsed ? 'true' : 'false');
+        toggle.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+        toggle.setAttribute('aria-label', collapsed ? 'Agrandir le menu' : 'Réduire le menu');
+    });
+})();
 </script>
 </body>
 </html>
