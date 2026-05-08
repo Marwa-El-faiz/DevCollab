@@ -46,7 +46,6 @@ This project was developed as a professional portfolio application to demonstrat
 - Automatically generate project tasks using AI
 - Smart task distribution based on team skills
 - AI-generated assignment reasoning
-- OpenAI-compatible API integration
 
 ### Analytics & Reporting
 - Global dashboard statistics
